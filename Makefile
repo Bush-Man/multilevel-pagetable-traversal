@@ -1,7 +1,10 @@
 all: run
 
-build: 
-	cargo build
+
+
+# build: 
+# 	cargo build
+
 
 run:
 	RUSTFLAGS="-Awarnings" cargo run	
