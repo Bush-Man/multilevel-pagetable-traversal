@@ -7,11 +7,11 @@
 :root {
   --border-radius: 12px;
   --containter-padding: 1.5rem;
-  --container-background: #0a0a12;
-  --secondary-bg-color: #080808;
-  /* --container-background: rgb(36, 35, 35); */
-  /* --secondary-bg-color: rgb(26, 26, 26); */
-  --main-background-color: #0a0a12;
+  /* --container-background: #0a0a12; */
+  /* --secondary-bg-color: #080808; */
+  --container-background: rgb(7, 7, 7);
+  --secondary-bg-color: rgb(39, 39, 39);
+  --main-background-color: black;
   --border-color: rgb(49, 49, 49);
   --black: black;
 }
@@ -25,6 +25,8 @@ body {
   gap: 2rem;
   background: var(--main-background-color);
   /* font-family: "Inter", system-ui, -apple-system, sans-serif; */
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 .parent-container {
@@ -32,7 +34,7 @@ body {
   flex-direction: column;
   gap: 2rem;
   height: 90vh;
-  width: 100vw;
+  width: 100%;
   padding: 1rem;
 }
 
@@ -54,7 +56,7 @@ body {
   padding: 1.5rem;
   background: var(--container-background);
   position: relative;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 .display-grid {
@@ -70,7 +72,8 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-  overflow: auto;
+  overflow: hidden;
+  /* overflow: auto; */
 }
 
 .background {
