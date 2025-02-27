@@ -1,14 +1,8 @@
 all: run
 
-
-
-# build: 
-# 	cargo build
-
-
-run:
-	RUSTFLAGS="-Awarnings" cargo run	
-
+run: 
+	RUSTFLAGS="-Awarnings" cargo run
+build:
+	cargo build
 clean:
 	cargo clean
-

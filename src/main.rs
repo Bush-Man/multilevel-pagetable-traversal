@@ -2,7 +2,7 @@ use std::sync::Mutex;
 
 use lazy_static::lazy_static;
 
-const ENTRIES_PER_TABLE: usize = 5;
+const ENTRIES_PER_TABLE: usize = 256;
 
 lazy_static! {
     static ref PHYSICAL_MEMORY: Mutex<PhysicalMemory> = {
@@ -91,7 +91,6 @@ impl PageTableHierarchy {
             self.extract_indices_from_virtual_address(virtual_address);
         if self.table4.entries[table4_idx].is_none() {
             self.table4.entries[table4_idx] = Some(Box::new(Table3::default()));
-            // Ok( format!("ENTRY_MAPPED:Table 4 Entry {:#?} mapped to Table 3 Successfully.  " ,table4_idx))
         }
 
         let ref mut table3 = self.table4.entries[table4_idx];
@@ -102,7 +101,6 @@ impl PageTableHierarchy {
                 let entry = &mut table3.as_mut().entries[table3_idx];
                 if entry.is_none() {
                     *entry = Some(Box::new(Table2::default()));
-                    //  Ok( format!("ENTRY_MAPPED: Table 3 Entry {:#?} mapped to Table 2 Successfully.  " ,table3_idx))
                 }
             }
             None => *table3 = Some(Box::new(Table3::default())),
@@ -118,7 +116,6 @@ impl PageTableHierarchy {
                 let entry = &mut table2.as_mut().entries[table2_idx];
                 if entry.is_none() {
                     *entry = Some(Box::new(Table1::default()));
-                    //  return Ok( format!("ENTRY_MAPPED: Table 2 Entry {:#?} mapped to Table 1 Successfully." ,table3_idx));
                 }
             }
             None => *table2 = Some(Box::new(Table2::default())),
@@ -131,12 +128,12 @@ impl PageTableHierarchy {
                 if entry.is_none() {
                     *entry = Some(offset);
 
-                    return Ok(format!("VIRTUAL_ADDRESS_MAPPED: Virtual address {:#?} mapped to Physical Frame successfully.",virtual_address));
+                    return Ok(format!("VIRTUAL_ADDRESS_MAPPED: Virtual address {:#X} mapped to Physical Frame successfully.",virtual_address));
                 }
                 if entry.is_some() {
-                    return Err( format!("ENTRY_USED: Failed to Map Virtual Address: {:#?} to Physical Frame {:#?} through Table 1 at index:  {:#?}" ,virtual_address,offset,table1_idx));
+                    return Err( format!("ENTRY_USED: Failed to Map Virtual Address: {:#X} to Physical Frame {:#X} through Table 1 at index:  {:#?}" ,virtual_address,offset,table1_idx));
                 } else {
-                    return Err( format!("PHYSICAL_MEMORY NOT INITALIZED: Failed to Map virtual address to physical memory:  {:#?}" ,virtual_address));
+                    return Err( format!("PHYSICAL_MEMORY NOT INITALIZED: Failed to Map virtual address to physical memory"));
                 }
             }
 
@@ -190,12 +187,15 @@ fn dump_memory(self)->Result<Vec<Option<DataTypes>>,String>{
 fn main() {
     let mut page_table_hierarchy = PageTableHierarchy::new();
 
+    println!("PML4 PAGE TABLE:{:#?}",page_table_hierarchy);
+
     let virtual_address = page_table_hierarchy.generate_virtual_address();
     let map_result = page_table_hierarchy.create_mapping(virtual_address);
     match map_result {
         Ok(res) => println!("{:#?}", res),
         Err(err) => println!("{:#?}", err),
     }
+
     let write_res = page_table_hierarchy
         .write_to_memory(virtual_address, DataTypes::StringType("hello".to_owned()));
     match write_res {
@@ -211,11 +211,11 @@ fn main() {
     match memory{
         Ok(data)=>{
             for (index,item) in data.iter().enumerate(){
-                println!("Memory data at index: {:#?} : {:#?}",index,item);
+                //VISUALIZE FULL MEMORY
+                //  println!("Memory data at address: {:#X} : {:#?}",index,item);
             }
 
         },
         Err(err)=>println!("{:#?}",err)
     }
     }
-
