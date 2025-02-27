@@ -183,6 +183,7 @@ hr {
 table {
   width: 100%;
   background-color: var(--black);
+  border-collapse: collapse;
 }
 
 th,
@@ -216,6 +217,6 @@ td {
 }
 
 .active {
-  background: #007bff;
+  background: rgba(86, 155, 86, 0.63);
   color: white;
 }
